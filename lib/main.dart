@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
               title: item.buildTitle(context),
               subtitle: item.buildSubtitle(context),
               tileColor: item is HeadingItem ? Colors.grey : Colors.white,
+              key: Key(i.toString()),
             );
           },
         ),

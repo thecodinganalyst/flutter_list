@@ -13,18 +13,20 @@ import 'package:flutter_list/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final itemList = List<ListItem>.generate(
+        200,
+            (i) => i % 6 == 0
+            ? HeadingItem('Header $i')
+            : MessageItem('Sender $i', 'Message body $i')
+    );
+    await tester.pumpWidget(MyApp(items: itemList,));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    final listFinder = find.byType(Scrollable);
+    final itemFinder = find.byKey(const ValueKey("199"));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.scrollUntilVisible(itemFinder, 500.0, scrollable: listFinder);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(itemFinder, findsOneWidget);
+
   });
 }
